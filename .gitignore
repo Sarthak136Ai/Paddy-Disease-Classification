@@ -1,0 +1,44 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Data and Raw files
+data/raw/
+data/processed/
+*.zip
+*.tar.gz
+
+# Checkpoints and models (large binaries)
+checkpoints/*.pth
+checkpoints/*.pt
+experiments/**/*.pth
+*.pth
+*.pt
+*.bin
+*.onnx
+
+# Uploads
+flask_app/uploads/*
+!flask_app/uploads/.gitkeep
+
+# Virtual environments
+venv/
+env/
+.env/
+.venv/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# HuggingFace & Torch cache
+.cache/
+hf_cache/
+
+# Tensorboard
+runs/

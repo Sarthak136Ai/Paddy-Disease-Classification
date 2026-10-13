@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Paddy Leaf Disease Detection System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <span class="pill pill-green" style="background: rgba(255,255,255,0.15); color: #fff; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-seedling"></i> Deep Learning & Transfer Learning
+        </span>
+        <h1 class="hero-title">Paddy Leaf Disease Detection & Performance Analysis</h1>
+        <p class="hero-subtitle">
+            An end-to-end research-grade diagnostic system comparing 5 deep learning and transfer learning architectures on 10,407 real-world rice crop leaf images across 10 disease categories.
+        </p>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="/predict" class="btn" style="background: #fff; color: var(--primary-900); font-weight: 700;">
+                <i class="fa-solid fa-microscope"></i> Launch Disease Diagnosis Studio
+            </a>
+            <a href="/model-performance" class="btn" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3);">
+                <i class="fa-solid fa-chart-line"></i> View Model Performance
+            </a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat-box">
+                <div class="stat-number">10,407</div>
+                <div class="stat-label">Total Images</div>
+            </div>
+            <div class="hero-stat-box">
+                <div class="stat-number">10</div>
+                <div class="stat-label">Disease Classes</div>
+            </div>
+            <div class="hero-stat-box">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Trained Architectures</div>
+            </div>
+            <div class="hero-stat-box">
+                <div class="stat-number">{{ stats.peak_accuracy }}</div>
+                <div class="stat-label">Peak Test Accuracy (ResNet50)</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Models Overview Grid -->
+<section style="margin-bottom: 2.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.25rem;">
+        <div>
+            <h2 style="font-size: 1.5rem; color: var(--text-primary);">Evaluated Deep Learning Architectures</h2>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                Verified test metrics on stratified 15% test split (1,562 unseen images)
+            </p>
+        </div>
+        <a href="/model-performance" class="btn btn-outline btn-sm">
+            Full Metrics Comparison <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <div class="grid-3" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        {% for key, meta in models.items() %}
+        {% set b = benchmarks[key] %}
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">{{ meta.name }}</div>
+                        <div class="card-subtitle">{{ meta.type }}</div>
+                    </div>
+                    {% if key == 'resnet50' %}
+                    <span class="pill pill-green">Top Accuracy</span>
+                    {% elif key == 'efficientnet_b0' %}
+                    <span class="pill pill-blue">Recommended</span>
+                    {% elif key == 'custom_cnn' %}
+                    <span class="pill pill-amber">Baseline</span>
+                    {% else %}
+                    <span class="pill pill-green">Evaluated</span>
+                    {% endif %}
+                </div>
+
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem; min-height: 48px;">
+                    {{ meta.description }}
+                </p>
+
+                <div style="background: var(--bg-main); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 1rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+                        <div>
+                            <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Test Accuracy</span>
+                            <div style="font-weight: 700; font-size: 1.15rem; color: var(--primary-800);">
+                                {{ b.accuracy_pct }}%
+                            </div>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Macro F1</span>
+                            <div style="font-weight: 700; font-size: 1.15rem; color: var(--accent-blue);">
+                                {{ "%.3f"|format(b.f1_macro) if b.f1_macro != "N/A" else "N/A" }}
+                            </div>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">GPU Latency</span>
+                            <div style="font-weight: 600; color: var(--text-primary);">
+                                {{ b.recorded_latency_ms }} ms/img
+                            </div>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Parameters</span>
+                            <div style="font-weight: 600; color: var(--text-primary);">
+                                {{ "%.2f"|format(meta.total_parameters / 1000000) }}M
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <a href="/predict?model={{ key }}" class="btn btn-primary btn-sm" style="flex: 1;">
+                    <i class="fa-solid fa-microscope"></i> Diagnose
+                </a>
+                <a href="/confusion-matrix?model={{ key }}" class="btn btn-outline btn-sm" title="View Confusion Matrix">
+                    <i class="fa-solid fa-border-all"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Disease Classes Catalog Grid -->
+<section class="card" style="margin-bottom: 2.5rem;">
+    <div class="card-header">
+        <div>
+            <h2 class="card-title"><i class="fa-solid fa-leaf" style="color: var(--primary-600);"></i> 10 Target Disease Classes</h2>
+            <p class="card-subtitle">Comprehensive pathological spectrum covering fungal, bacterial, pest-induced, and healthy leaf profiles</p>
+        </div>
+        <span class="pill pill-green">10,407 Images in Dataset</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem;">
+        {% for key, info in classes.items() %}
+        <div style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.85rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.35rem;">
+                <strong style="font-size: 0.9rem; color: var(--text-primary);">{{ info.name }}</strong>
+                <span class="pill {% if info.pathogen_type == 'Healthy Control' %}pill-green{% elif info.pathogen_type == 'Fungal' %}pill-blue{% elif info.pathogen_type == 'Bacterial' %}pill-red{% else %}pill-amber{% endif %}" style="font-size: 0.65rem; padding: 0.1rem 0.4rem;">
+                    {{ info.pathogen_type }}
+                </span>
+            </div>
+            <div style="font-style: italic; font-size: 0.76rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                {{ info.scientific_name }}
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                {{ info.symptoms }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Quick Link Dashboard Tiles -->
+<section class="grid-3" style="margin-bottom: 2rem;">
+    <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);">
+        <div style="font-size: 1.75rem; color: var(--primary-700); margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">Per-Class Performance</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            Inspect class-level precision, recall, F1-score, and support counts for all 10 pathological categories.
+        </p>
+        <a href="/class-performance" class="btn btn-outline btn-sm">Explore Class Metrics &rarr;</a>
+    </div>
+
+    <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);">
+        <div style="font-size: 1.75rem; color: var(--accent-blue); margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-table-cells-large"></i>
+        </div>
+        <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">Confusion Matrix Gallery</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            Examine true positive diagonals and error confusion trends across all 5 evaluated architectures.
+        </p>
+        <a href="/confusion-matrix" class="btn btn-outline btn-sm">View Confusion Matrices &rarr;</a>
+    </div>
+
+    <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%);">
+        <div style="font-size: 1.75rem; color: var(--accent-gold); margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-stopwatch"></i>
+        </div>
+        <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">Live Hardware Benchmarking</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            Run live multi-pass latency and throughput benchmarks directly on the active server device.
+        </p>
+        <a href="/model-selection" class="btn btn-outline btn-sm">Run Live Benchmark &rarr;</a>
+    </div>
+</section>
+{% endblock %}

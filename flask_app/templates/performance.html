@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Model Performance Analysis | Paddy Leaf AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h1 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 0.35rem;">
+                <i class="fa-solid fa-chart-line" style="color: var(--primary-700);"></i> Model Performance Analysis
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 1rem;">
+                Verified multi-metric comparative benchmark across 5 deep learning and transfer learning architectures on 1,562 unseen test images.
+            </p>
+        </div>
+        <div style="text-align: right;">
+            <span class="pill pill-green"><i class="fa-solid fa-database"></i> Verified Test Split (15%)</span>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">Seed: 42 | Stratified 10 Classes</div>
+        </div>
+    </div>
+</div>
+
+<!-- Performance Comparative Table Card -->
+<div class="card" style="margin-bottom: 2.5rem;">
+    <div class="card-header">
+        <div>
+            <h2 class="card-title"><i class="fa-solid fa-table" style="color: var(--primary-600);"></i> Verified Test Set Performance Table</h2>
+            <p class="card-subtitle">Exact evaluation metrics computed on held-out test split (1,562 images)</p>
+        </div>
+        <span class="pill pill-blue">Recorded Benchmarks</span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Model Architecture</th>
+                    <th>Type</th>
+                    <th style="text-align: right;">Test Accuracy</th>
+                    <th style="text-align: right;">Macro F1</th>
+                    <th style="text-align: right;">Macro Precision</th>
+                    <th style="text-align: right;">Macro Recall</th>
+                    <th style="text-align: right;">GPU Latency</th>
+                    <th style="text-align: right;">Total Parameters</th>
+                    <th style="text-align: right;">Size (MB)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, meta in models.items() %}
+                {% set b = benchmarks[key] %}
+                <tr {% if key == 'resnet50' %}class="highlight-row"{% endif %}>
+                    <td>
+                        <strong>{{ meta.name }}</strong>
+                        {% if key == 'resnet50' %}<span class="pill pill-green" style="font-size: 0.65rem; margin-left: 6px;">Peak Acc</span>{% endif %}
+                        {% if key == 'efficientnet_b0' %}<span class="pill pill-blue" style="font-size: 0.65rem; margin-left: 6px;">Fastest</span>{% endif %}
+                    </td>
+                    <td><small style="color: var(--text-secondary);">{{ meta.type }}</small></td>
+                    <td style="text-align: right; font-weight: 700; color: var(--primary-800);">
+                        {{ b.accuracy_pct }}%
+                    </td>
+                    <td style="text-align: right; font-weight: 600; color: var(--accent-blue);">
+                        {{ "%.4f"|format(b.f1_macro) if b.f1_macro != "N/A" else "N/A" }}
+                    </td>
+                    <td style="text-align: right;">
+                        {{ "%.4f"|format(b.precision_macro) if b.precision_macro is defined and b.precision_macro != "N/A" else "N/A" }}
+                    </td>
+                    <td style="text-align: right;">
+                        {{ "%.4f"|format(b.recall_macro) if b.recall_macro is defined and b.recall_macro != "N/A" else "N/A" }}
+                    </td>
+                    <td style="text-align: right; font-weight: 600;">
+                        {{ b.recorded_latency_ms }} ms
+                    </td>
+                    <td style="text-align: right;">
+                        {{ "{:,}".format(meta.total_parameters) }} <small class="text-muted">({{ "%.2f"|format(meta.total_parameters / 1000000) }}M)</small>
+                    </td>
+                    <td style="text-align: right;">
+                        {{ "%.1f"|format(b.model_size_mb) if b.model_size_mb is defined and b.model_size_mb != 0 else "N/A" }} MB
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Interactive Visualizations Grid -->
+<div class="grid-2" style="margin-bottom: 2.5rem;">
+    <!-- Chart 1: Accuracy vs Macro F1 -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3 class="card-title" style="font-size: 1.05rem;">
+                    <i class="fa-solid fa-chart-column" style="color: var(--primary-600);"></i> Chart 1 — Test Accuracy vs Macro F1
+                </h3>
+                <p class="card-subtitle">Grouped comparison of classification accuracy and balanced harmonic F1</p>
+            </div>
+        </div>
+        <div style="height: 320px; position: relative;">
+            <canvas id="accuracyF1Chart"></canvas>
+        </div>
+    </div>
+
+    <!-- Chart 2: Inference Speed -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3 class="card-title" style="font-size: 1.05rem;">
+                    <i class="fa-solid fa-bolt" style="color: var(--accent-amber);"></i> Chart 2 — GPU Inference Latency
+                </h3>
+                <p class="card-subtitle">Milliseconds per image (lower latency corresponds to faster inference)</p>
+            </div>
+        </div>
+        <div style="height: 320px; position: relative;">
+            <canvas id="latencyChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart 3: Accuracy vs Parameter Count Scatter Plot -->
+<div class="card" style="margin-bottom: 2.5rem;">
+    <div class="card-header">
+        <div>
+            <h3 class="card-title">
+                <i class="fa-solid fa-arrows-to-circle" style="color: var(--accent-blue);"></i> Chart 3 — Test Accuracy vs Total Parameter Count
+            </h3>
+            <p class="card-subtitle">Scatter & bubble visualization (bubble size reflects inference latency in ms)</p>
+        </div>
+        <span class="pill pill-green">Efficiency Trade-off</span>
+    </div>
+    <div style="height: 380px; position: relative;">
+        <canvas id="accuracyParamsChart"></canvas>
+    </div>
+</div>
+
+<!-- Objective Model Analysis & Observations -->
+<div class="card" style="border-left: 4px solid var(--primary-700);">
+    <div class="card-header">
+        <div>
+            <h3 class="card-title">
+                <i class="fa-solid fa-file-lines" style="color: var(--primary-700);"></i> Model Analysis & Empirical Observations
+            </h3>
+            <p class="card-subtitle">Evidence-based comparative summary derived strictly from test-set evaluation</p>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                <i class="fa-solid fa-check-circle" style="color: var(--primary-600);"></i> Transfer Learning Performance Lift
+            </strong>
+            <p>
+                ResNet50 demonstrated the highest recorded test accuracy (<strong>96.93%</strong>) and macro F1 score (<strong>0.9696</strong>) among all evaluated architectures. Pre-trained ImageNet representations provide rich, generalizable feature extractors for microscopic and macroscopic lesion structures on paddy foliage.
+            </p>
+        </div>
+
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                <i class="fa-solid fa-bolt" style="color: var(--accent-amber);"></i> Parameter Efficiency & Latency Winner
+            </strong>
+            <p>
+                EfficientNet-B0 achieved the lowest recorded GPU inference latency (<strong>7.08 ms/image</strong>) while reaching <strong>96.73%</strong> test accuracy. With only <strong>4.02M parameters</strong> (5.8x fewer parameters than ResNet50's 23.53M), EfficientNet-B0 provides the most balanced trade-off between diagnostic accuracy and low latency for edge or web deployment.
+            </p>
+        </div>
+
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                <i class="fa-solid fa-microchip" style="color: var(--accent-blue);"></i> MobileNetV3 & DenseNet121
+            </strong>
+            <p>
+                MobileNetV3 (<strong>94.37% accuracy</strong>, 4.21M parameters) and DenseNet121 (<strong>92.57% accuracy</strong>, 6.96M parameters) also exhibited strong transfer learning convergence, though DenseNet's repetitive feature concatenation added slight memory overhead.
+            </p>
+        </div>
+
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                <i class="fa-solid fa-chart-line-down" style="color: var(--accent-red);"></i> Scratch Baseline Limitation
+            </strong>
+            <p>
+                The Custom CNN trained from scratch achieved <strong>45.39%</strong> test accuracy and <strong>0.3163</strong> macro F1 score. This substantial difference empirically demonstrates that training directly on 7,284 images without pre-initialized weights is insufficient to fully capture fine-grained paddy leaf pathology patterns.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts_extra %}
+<script>
+    // Pass serialized backend chart data into JavaScript scope
+    window.chartData = {{ charts | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}

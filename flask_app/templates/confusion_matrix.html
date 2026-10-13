@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Confusion Matrix | Paddy Leaf AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h1 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 0.35rem;">
+                <i class="fa-solid fa-border-all" style="color: var(--primary-700);"></i> Confusion Matrix Gallery
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 1rem;">
+                Empirical test-split confusion matrices illustrating actual vs. predicted class distributions for all 10 paddy leaf pathologies.
+            </p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <label for="cmModelSelector" style="font-weight: 600; font-size: 0.9rem; color: var(--text-secondary);">Select Model:</label>
+            <select id="cmModelSelector" class="form-select" style="width: auto;" onchange="location.href='/confusion-matrix?model=' + this.value;">
+                {% for key, meta in models.items() %}
+                <option value="{{ key }}" {% if key == selected_model %}selected{% endif %}>
+                    {{ meta.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Active Model Performance Header -->
+<div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <span class="pill pill-green" style="margin-bottom: 0.35rem;">Test Set Evaluation (1,562 Images)</span>
+            <h2 style="font-size: 1.35rem; color: var(--text-primary);">{{ current_meta.name }} Confusion Matrix</h2>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                Architecture: {{ current_meta.type }} | Backbone: <code>{{ current_meta.backbone }}</code>
+            </div>
+        </div>
+        <div style="display: flex; gap: 1.5rem;">
+            <div>
+                <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Test Accuracy</span>
+                <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary-800);">{{ current_benchmark.accuracy_pct }}%</div>
+            </div>
+            <div>
+                <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Macro F1</span>
+                <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-blue);">
+                    {{ "%.4f"|format(current_benchmark.f1_macro) if current_benchmark.f1_macro != "N/A" else "N/A" }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confusion Matrix Image Display Cards -->
+<div class="grid-2" style="margin-bottom: 2.5rem;">
+    <!-- Normalized Confusion Matrix -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3 class="card-title"><i class="fa-solid fa-percent" style="color: var(--primary-600);"></i> Normalized Confusion Matrix</h3>
+                <p class="card-subtitle">Values normalized across true class support (recall per class)</p>
+            </div>
+            <a href="/results/metrics/{{ selected_model }}_test_confusion_matrix_norm.png" target="_blank" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-expand"></i> Full Res
+            </a>
+        </div>
+        <div style="text-align: center; background: #fff; border-radius: var(--radius-md); padding: 0.5rem; overflow: hidden;">
+            <img src="/results/metrics/{{ selected_model }}_test_confusion_matrix_norm.png" alt="Normalized Confusion Matrix" style="width: 100%; max-height: 520px; object-fit: contain; border-radius: var(--radius-sm);">
+        </div>
+    </div>
+
+    <!-- Raw Count Confusion Matrix -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3 class="card-title"><i class="fa-solid fa-hashtag" style="color: var(--accent-blue);"></i> Raw Count Confusion Matrix</h3>
+                <p class="card-subtitle">Exact number of test sample predictions per category</p>
+            </div>
+            <a href="/results/metrics/{{ selected_model }}_test_confusion_matrix.png" target="_blank" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-expand"></i> Full Res
+            </a>
+        </div>
+        <div style="text-align: center; background: #fff; border-radius: var(--radius-md); padding: 0.5rem; overflow: hidden;">
+            <img src="/results/metrics/{{ selected_model }}_test_confusion_matrix.png" alt="Raw Confusion Matrix" style="width: 100%; max-height: 520px; object-fit: contain; border-radius: var(--radius-sm);">
+        </div>
+    </div>
+</div>
+
+<!-- Diagonal & Misclassification Analysis Panel -->
+<div class="card" style="border-left: 4px solid var(--accent-blue);">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fa-solid fa-magnifying-glass-chart" style="color: var(--accent-blue);"></i> Confusion Matrix Structural Analysis</h3>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                <i class="fa-solid fa-square-check" style="color: var(--primary-600);"></i> Dominant True-Positive Diagonal
+            </strong>
+            <p>
+                The strong diagonal coloration reflects consistent per-class sensitivity across distinct disease phenotypes. In transfer learning models (ResNet50 & EfficientNet-B0), classes with distinct morphological features such as <em>Tungro</em> (orange leaf discoloration), <em>Hispa</em> (white linear feeding scars), and <em>Normal</em> (unblemished epidermis) show near-perfect true positive rates (>97%).
+            </p>
+        </div>
+
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                <i class="fa-solid fa-arrows-split-up-and-left" style="color: var(--accent-amber);"></i> Inter-Bacterial Lesion Confusion
+            </strong>
+            <p>
+                Minor off-diagonal confusion occurs between <em>Bacterial Leaf Blight</em> and <em>Bacterial Leaf Streak</em>. Both pathologies exhibit elongated chlorotic streaks and water-soaked leaf margins in early progression stages, leading to occasional feature overlap.
+            </p>
+        </div>
+
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                <i class="fa-solid fa-crosshairs" style="color: var(--primary-700);"></i> Fungal Blast & Brown Spot Separation
+            </strong>
+            <p>
+                Diamond-shaped lesions of <em>Blast</em> (Pyricularia oryzae) and circular spots of <em>Brown Spot</em> (Bipolaris oryzae) are accurately separated by deep residual layers capturing high-frequency perimeter gradients and halo transitions.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

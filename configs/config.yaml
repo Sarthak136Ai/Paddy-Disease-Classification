@@ -1,0 +1,66 @@
+# Paddy Leaf Disease Detection Configuration
+
+project:
+  name: "paddy_leaf_disease_detection"
+  seed: 42
+  num_classes: 10
+  class_names:
+    - bacterial_leaf_blight
+    - bacterial_leaf_streak
+    - bacterial_panicle_blight
+    - blast
+    - brown_spot
+    - dead_heart
+    - downy_mildew
+    - hispa
+    - normal
+    - tungro
+
+dataset:
+  hf_path: "anthony2261/paddy-disease-classification"
+  image_size: [224, 224]
+  splits:
+    train_ratio: 0.70
+    val_ratio: 0.15
+    test_ratio: 0.15
+    stratify: true
+    random_seed: 42
+  split_file: "data/splits/split_indices.json"
+
+preprocessing:
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+  augmentation:
+    horizontal_flip_prob: 0.5
+    vertical_flip_prob: 0.2
+    rotation_degrees: 15
+    color_jitter:
+      brightness: 0.2
+      contrast: 0.2
+      saturation: 0.2
+
+training:
+  batch_size: 32
+  num_workers: 2
+  epochs: 30
+  optimizer: "AdamW"
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  scheduler: "CosineAnnealingLR"
+  early_stopping:
+    patience: 7
+    min_delta: 0.001
+    monitor: "val_loss"
+    mode: "min"
+
+paths:
+  data_dir: "data"
+  raw_data_dir: "data/raw"
+  splits_dir: "data/splits"
+  checkpoints_dir: "checkpoints"
+  experiments_dir: "experiments"
+  results_dir: "results"
+  plots_dir: "results/plots"
+  metrics_dir: "results/metrics"
+  confusion_matrices_dir: "results/confusion_matrices"
+  predictions_dir: "results/predictions"

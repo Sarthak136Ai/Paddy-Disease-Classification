@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}About & Research Documentation | Paddy Leaf AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 0.35rem;">
+        <i class="fa-solid fa-book-open" style="color: var(--primary-700);"></i> About & Research Documentation
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 1rem;">
+        Paddy/Rice Leaf Disease Detection and Classification Using Deep Learning and Transfer Learning
+    </p>
+</div>
+
+<!-- Project Overview Card -->
+<div class="card" style="margin-bottom: 2rem;">
+    <div class="card-header">
+        <h2 class="card-title"><i class="fa-solid fa-wheat-awn" style="color: var(--primary-600);"></i> Project Overview</h2>
+        <span class="pill pill-green">Research Specification</span>
+    </div>
+    <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem;">
+        Rice (<em>Oryza sativa</em>) is a staple food source for more than half the global human population. Pathogenic foliage infections—spanning fungal, bacterial, oomycete, and insect vector damage—cause severe yield loss and economic hardship for smallholder farmers. This project implements a rigorous, reproducible computer vision framework comparing transfer learning representations against a baseline CNN trained from scratch across 10,407 high-resolution field images.
+    </p>
+</div>
+
+<!-- Dataset Specifications Card -->
+<div class="card" style="margin-bottom: 2rem;">
+    <div class="card-header">
+        <h2 class="card-title"><i class="fa-solid fa-database" style="color: var(--accent-blue);"></i> Dataset Specifications</h2>
+        <span class="pill pill-blue">Hugging Face Hub</span>
+    </div>
+
+    <div style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+        <ul style="list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; font-size: 0.9rem;">
+            <li><strong>Dataset Repository:</strong> <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">anthony2261/paddy-disease-classification</code></li>
+            <li><strong>Total Image Count:</strong> 10,407 RGB Images</li>
+            <li><strong>Number of Classes:</strong> 10 Balanced Categories</li>
+            <li><strong>Data Split:</strong> Stratified 70% Train (7,284) / 15% Val (1,561) / 15% Test (1,562)</li>
+            <li><strong>Random Seed:</strong> 42 (Fixed for Exact Reproducibility)</li>
+            <li><strong>Metadata Fields:</strong> Image, Label, Variety, Age</li>
+        </ul>
+    </div>
+
+    <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--text-primary);">The 10 Target Disease Classes:</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem;">
+        {% for key, info in classes.items() %}
+        <div style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.85rem; background: #fff;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.35rem;">
+                <strong style="font-size: 0.92rem;">{{ info.name }}</strong>
+                <span class="pill {% if info.pathogen_type == 'Healthy Control' %}pill-green{% elif info.pathogen_type == 'Fungal' %}pill-blue{% elif info.pathogen_type == 'Bacterial' %}pill-red{% else %}pill-amber{% endif %}" style="font-size: 0.65rem;">
+                    {{ info.pathogen_type }}
+                </span>
+            </div>
+            <div style="font-style: italic; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+                {{ info.scientific_name }}
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">
+                {{ info.symptoms }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Architecture & Methodology Card -->
+<div class="card" style="margin-bottom: 2rem;">
+    <div class="card-header">
+        <h2 class="card-title"><i class="fa-solid fa-network-wired" style="color: var(--primary-600);"></i> Evaluated Model Architectures</h2>
+        <span class="pill pill-green">5 Architectures</span>
+    </div>
+
+    <div class="grid-2" style="gap: 1.5rem; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.25rem;">
+                1. ResNet50 (He et al.)
+            </strong>
+            <p>50-layer deep residual network utilizing identity shortcut connections to solve vanishing gradients in very deep feature hierarchies. Achieved peak test accuracy of <strong>96.93%</strong>.</p>
+        </div>
+
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.25rem;">
+                2. EfficientNet-B0 (Tan & Le)
+            </strong>
+            <p>Compound-scaled convolutional network optimizing network depth, width, and image resolution with inverted bottleneck blocks. Achieved <strong>96.73%</strong> accuracy at <strong>7.08 ms</strong> latency (Recommended production model).</p>
+        </div>
+
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.25rem;">
+                3. MobileNetV3-Large (Howard et al.)
+            </strong>
+            <p>Edge-optimized architecture leveraging hardware-aware Neural Architecture Search (NAS), Hard-Swish non-linearities, and Squeeze-and-Excitation attention modules. Achieved <strong>94.37%</strong> accuracy.</p>
+        </div>
+
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.25rem;">
+                4. DenseNet121 (Huang et al.)
+            </strong>
+            <p>Densely connected convolutional network connecting each layer to every subsequent layer in a feed-forward fashion to encourage aggressive feature reuse. Achieved <strong>92.57%</strong> accuracy.</p>
+        </div>
+
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.25rem;">
+                5. Custom CNN Baseline (From Scratch)
+            </strong>
+            <p>4-stage convolutional neural network trained without pre-trained weights. Achieved <strong>45.39%</strong> accuracy, serving as an empirical baseline proving the indispensable value of transfer learning.</p>
+        </div>
+
+        <div>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.25rem;">
+                Grad-CAM Visual Explainability (Selvaraju et al.)
+            </strong>
+            <p>Uses target class gradient flow into the final convolutional feature maps to produce a coarse 2D localization heatmap highlighting predictive lesion regions.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Ethical & Agricultural Disclaimer -->
+<div class="card" style="border-left: 4px solid var(--accent-amber); background: #fffbeb;">
+    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+        <i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-gold); font-size: 1.5rem; margin-top: 4px;"></i>
+        <div>
+            <h3 style="color: #92400e; font-size: 1.05rem; margin-bottom: 0.35rem;">Agricultural & Diagnostic Disclaimer</h3>
+            <p style="font-size: 0.85rem; color: #78350f; line-height: 1.6;">
+                This web application and its underlying deep learning models are developed strictly for academic, research, and educational purposes. Model predictions and Grad-CAM visual attention overlays represent probabilistic statistical patterns and should <strong>not</strong> be treated as definitive or legal agricultural phytosanitary diagnoses. Field management decisions, chemical spraying, and disease containment should always be verified by certified agronomists or local agricultural extension personnel.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

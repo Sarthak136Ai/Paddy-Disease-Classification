@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Class Performance | Paddy Leaf AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h1 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 0.35rem;">
+                <i class="fa-solid fa-table-cells" style="color: var(--primary-700);"></i> Per-Class Performance Breakdown
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 1rem;">
+                Detailed Precision, Recall, F1-Score, and Support counts across all 10 pathological disease classes.
+            </p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <label for="classModelSelector" style="font-weight: 600; font-size: 0.9rem; color: var(--text-secondary);">Select Model:</label>
+            <select id="classModelSelector" class="form-select" style="width: auto;" onchange="location.href='/class-performance?model=' + this.value;">
+                {% for key, meta in models.items() %}
+                <option value="{{ key }}" {% if key == selected_model %}selected{% endif %}>
+                    {{ meta.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Current Selected Model Summary Banner -->
+<div class="card" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <span class="pill pill-green" style="margin-bottom: 0.35rem;">Active Evaluation</span>
+            <h2 style="font-size: 1.35rem; color: var(--text-primary);">{{ current_meta.name }} ({{ current_meta.type }})</h2>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                Backbone: <code>{{ current_meta.backbone }}</code> | Parameters: {{ "{:,}".format(current_meta.total_parameters) }}
+            </div>
+        </div>
+        <div style="display: flex; gap: 1.5rem;">
+            <div>
+                <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Overall Accuracy</span>
+                <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary-800);">{{ current_benchmark.accuracy_pct }}%</div>
+            </div>
+            <div>
+                <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Macro F1</span>
+                <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-blue);">
+                    {{ "%.4f"|format(current_benchmark.f1_macro) if current_benchmark.f1_macro != "N/A" else "N/A" }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Per-Class Metrics Table -->
+<div class="card" style="margin-bottom: 2rem;">
+    <div class="card-header">
+        <div>
+            <h3 class="card-title"><i class="fa-solid fa-list-check" style="color: var(--primary-600);"></i> 10-Class Classification Report</h3>
+            <p class="card-subtitle">Values computed dynamically from verified JSON evaluation artifacts on 1,562 test samples</p>
+        </div>
+        <span class="pill pill-green">Stratified Test Split</span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Class #</th>
+                    <th>Disease Category</th>
+                    <th>Pathogen Type</th>
+                    <th style="text-align: right;">Precision</th>
+                    <th style="text-align: right;">Recall</th>
+                    <th style="text-align: right;">F1-Score</th>
+                    <th style="text-align: right;">Support (Images)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in class_rows %}
+                <tr>
+                    <td><span class="font-mono" style="color: var(--text-muted);">#{{ loop.index0 }}</span></td>
+                    <td>
+                        <strong>{{ row.display_name }}</strong>
+                    </td>
+                    <td>
+                        <span class="pill {% if row.pathogen_type == 'Healthy Control' %}pill-green{% elif row.pathogen_type == 'Fungal' %}pill-blue{% elif row.pathogen_type == 'Bacterial' %}pill-red{% else %}pill-amber{% endif %}" style="font-size: 0.7rem;">
+                            {{ row.pathogen_type }}
+                        </span>
+                    </td>
+                    <td style="text-align: right; font-weight: 600;">
+                        {{ row.precision_pct }}
+                    </td>
+                    <td style="text-align: right; font-weight: 600;">
+                        {{ row.recall_pct }}
+                    </td>
+                    <td style="text-align: right; font-weight: 700; color: var(--primary-800);">
+                        {{ row.f1_pct }}
+                    </td>
+                    <td style="text-align: right; font-family: monospace;">
+                        {{ row.support }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr style="background: #f8fafc; font-weight: 700; border-top: 2px solid var(--border-color);">
+                    <td colspan="3" style="text-transform: uppercase; font-size: 0.82rem; color: var(--text-secondary);">
+                        Macro Average / Weighted Average
+                    </td>
+                    <td style="text-align: right; color: var(--primary-800);">
+                        {{ "%.2f"|format(current_benchmark.precision_macro * 100) if current_benchmark.precision_macro is defined and current_benchmark.precision_macro != "N/A" else "N/A" }}%
+                    </td>
+                    <td style="text-align: right; color: var(--primary-800);">
+                        {{ "%.2f"|format(current_benchmark.recall_macro * 100) if current_benchmark.recall_macro is defined and current_benchmark.recall_macro != "N/A" else "N/A" }}%
+                    </td>
+                    <td style="text-align: right; color: var(--accent-blue);">
+                        {{ "%.2f"|format(current_benchmark.f1_macro * 100) if current_benchmark.f1_macro != "N/A" else "N/A" }}%
+                    </td>
+                    <td style="text-align: right; font-family: monospace;">
+                        1,562
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<!-- Class F1 Bar Chart Canvas -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3 class="card-title"><i class="fa-solid fa-chart-simple" style="color: var(--accent-blue);"></i> Per-Class F1-Score Chart ({{ current_meta.name }})</h3>
+            <p class="card-subtitle">Visual representation of disease recognition balance</p>
+        </div>
+    </div>
+    <div style="height: 360px; position: relative;">
+        <canvas id="classF1Chart"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts_extra %}
+<script id="classF1LabelsData" type="application/json">
+{{ class_rows | map(attribute='display_name') | list | tojson }}
+</script>
+<script id="classF1ValuesData" type="application/json">
+{{ class_rows | map(attribute='f1_score') | list | tojson }}
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const ctx = document.getElementById("classF1Chart");
+        if (!ctx) return;
+
+        const labelsEl = document.getElementById("classF1LabelsData");
+        const valuesEl = document.getElementById("classF1ValuesData");
+        const classLabels = labelsEl ? JSON.parse(labelsEl.textContent) : [];
+        const rawF1 = valuesEl ? JSON.parse(valuesEl.textContent) : [];
+        const f1Values = rawF1.map((v) => (typeof v === "number" ? Math.round(v * 10000) / 100 : 0));
+
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: classLabels,
+                datasets: [{
+                    label: "F1-Score (%)",
+                    data: f1Values,
+                    backgroundColor: "rgba(5, 150, 105, 0.8)",
+                    borderColor: "rgba(4, 120, 87, 1)",
+                    borderWidth: 1.5,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: "y",
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (c) => `F1-Score: ${c.raw}%`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: "F1-Score (%)", font: { weight: "600" } },
+                        grid: { color: "rgba(226, 232, 240, 0.8)" }
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ app_title }}{% endblock %}</title>
+    
+    <!-- Meta tags for SEO & Academic indexing -->
+    <meta name="description" content="Deep Learning & Transfer Learning System for Paddy Leaf Disease Detection and Multi-Model Performance Analysis.">
+    <meta name="keywords" content="Paddy Leaf Disease, Rice Crop, Deep Learning, Transfer Learning, ResNet50, EfficientNet, PyTorch, Grad-CAM">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-inner">
+            <a href="/" class="nav-brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-wheat-awn"></i>
+                </div>
+                <div>
+                    <span>PaddyGuard AI</span>
+                    <div style="font-size: 0.68rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Rice Leaf Pathology System</div>
+                </div>
+            </a>
+
+            <button class="mobile-toggle" aria-label="Toggle Navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <ul class="nav-links">
+                <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+                    <a href="/"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+                </li>
+                <li class="nav-item {% if request.path in ['/predict', '/prediction'] %}active{% endif %}">
+                    <a href="/predict"><i class="fa-solid fa-microscope"></i> Disease Detection</a>
+                </li>
+                <li class="nav-item {% if request.path == '/model-performance' %}active{% endif %}">
+                    <a href="/model-performance"><i class="fa-solid fa-chart-line"></i> Model Performance</a>
+                </li>
+                <li class="nav-item {% if request.path == '/class-performance' %}active{% endif %}">
+                    <a href="/class-performance"><i class="fa-solid fa-table-cells"></i> Class Metrics</a>
+                </li>
+                <li class="nav-item {% if request.path == '/confusion-matrix' %}active{% endif %}">
+                    <a href="/confusion-matrix"><i class="fa-solid fa-border-all"></i> Confusion Matrix</a>
+                </li>
+                <li class="nav-item {% if request.path == '/model-selection' %}active{% endif %}">
+                    <a href="/model-selection"><i class="fa-solid fa-sliders"></i> Model Selection</a>
+                </li>
+                <li class="nav-item {% if request.path == '/about' %}active{% endif %}">
+                    <a href="/about"><i class="fa-solid fa-circle-info"></i> About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div>
+                <p><strong>Paddy Leaf Disease Detection & Model Performance Analysis System</strong></p>
+                <p style="color: var(--text-muted); font-size: 0.8rem;">
+                    Hugging Face Dataset: <code>anthony2261/paddy-disease-classification</code> | 10,407 Multi-Class Images | 10 Pathological Classes
+                </p>
+            </div>
+            <div style="text-align: right;">
+                <span class="pill pill-green"><i class="fa-solid fa-shield-halved"></i> Academic & Research Use</span>
+                <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 4px;">
+                    Powered by PyTorch, Transfer Learning & Flask Backend
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts_extra %}{% endblock %}
+</body>
+</html>
