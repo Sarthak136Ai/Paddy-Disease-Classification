@@ -1,0 +1,290 @@
+{
+  "dataset_name": "anthony2261/paddy-disease-classification",
+  "total_images": 10407,
+  "valid_images": 10407,
+  "corrupted_images_count": 0,
+  "corrupted_indices": [],
+  "duplicate_groups_count": 72,
+  "duplicate_instances_count": 74,
+  "num_classes": 10,
+  "class_names": [
+    "bacterial_leaf_blight",
+    "bacterial_leaf_streak",
+    "bacterial_panicle_blight",
+    "blast",
+    "brown_spot",
+    "dead_heart",
+    "downy_mildew",
+    "hispa",
+    "normal",
+    "tungro"
+  ],
+  "class_distribution": {
+    "bacterial_leaf_blight": {
+      "class_id": 0,
+      "count": 479,
+      "percentage": 4.6
+    },
+    "bacterial_leaf_streak": {
+      "class_id": 1,
+      "count": 380,
+      "percentage": 3.65
+    },
+    "bacterial_panicle_blight": {
+      "class_id": 2,
+      "count": 337,
+      "percentage": 3.24
+    },
+    "blast": {
+      "class_id": 3,
+      "count": 1738,
+      "percentage": 16.7
+    },
+    "brown_spot": {
+      "class_id": 4,
+      "count": 965,
+      "percentage": 9.27
+    },
+    "dead_heart": {
+      "class_id": 5,
+      "count": 1442,
+      "percentage": 13.86
+    },
+    "downy_mildew": {
+      "class_id": 6,
+      "count": 620,
+      "percentage": 5.96
+    },
+    "hispa": {
+      "class_id": 7,
+      "count": 1594,
+      "percentage": 15.32
+    },
+    "normal": {
+      "class_id": 8,
+      "count": 1764,
+      "percentage": 16.95
+    },
+    "tungro": {
+      "class_id": 9,
+      "count": 1088,
+      "percentage": 10.45
+    }
+  },
+  "variety_distribution": {
+    "ADT45": {
+      "variety_id": 0,
+      "count": 6992,
+      "percentage": 67.19
+    },
+    "IR20": {
+      "variety_id": 1,
+      "count": 114,
+      "percentage": 1.1
+    },
+    "KarnatakaPonni": {
+      "variety_id": 2,
+      "count": 988,
+      "percentage": 9.49
+    },
+    "Onthanel": {
+      "variety_id": 3,
+      "count": 351,
+      "percentage": 3.37
+    },
+    "Ponni": {
+      "variety_id": 4,
+      "count": 657,
+      "percentage": 6.31
+    },
+    "Surya": {
+      "variety_id": 5,
+      "count": 32,
+      "percentage": 0.31
+    },
+    "Zonal": {
+      "variety_id": 6,
+      "count": 399,
+      "percentage": 3.83
+    },
+    "AndraPonni": {
+      "variety_id": 7,
+      "count": 377,
+      "percentage": 3.62
+    },
+    "AtchayaPonni": {
+      "variety_id": 8,
+      "count": 461,
+      "percentage": 4.43
+    },
+    "RR": {
+      "variety_id": 9,
+      "count": 36,
+      "percentage": 0.35
+    }
+  },
+  "age_statistics": {
+    "min": 45,
+    "max": 82,
+    "mean": 64.04,
+    "median": 67.0,
+    "std": 8.96,
+    "unique_ages": [
+      45,
+      47,
+      50,
+      55,
+      57,
+      60,
+      62,
+      65,
+      66,
+      67,
+      68,
+      70,
+      72,
+      73,
+      75,
+      77,
+      80,
+      82
+    ]
+  },
+  "image_dimension_summary": {
+    "480x640": 10403,
+    "640x480": 4
+  },
+  "color_modes": {
+    "RGB": 10407
+  },
+  "variety_vs_disease_crosstab": {
+    "bacterial_leaf_blight": {
+      "ADT45": 406,
+      "AndraPonni": 0,
+      "AtchayaPonni": 0,
+      "IR20": 10,
+      "KarnatakaPonni": 10,
+      "Onthanel": 4,
+      "Ponni": 34,
+      "RR": 0,
+      "Surya": 2,
+      "Zonal": 13
+    },
+    "bacterial_leaf_streak": {
+      "ADT45": 107,
+      "AndraPonni": 0,
+      "AtchayaPonni": 0,
+      "IR20": 0,
+      "KarnatakaPonni": 35,
+      "Onthanel": 69,
+      "Ponni": 0,
+      "RR": 0,
+      "Surya": 0,
+      "Zonal": 169
+    },
+    "bacterial_panicle_blight": {
+      "ADT45": 260,
+      "AndraPonni": 14,
+      "AtchayaPonni": 0,
+      "IR20": 0,
+      "KarnatakaPonni": 0,
+      "Onthanel": 0,
+      "Ponni": 63,
+      "RR": 0,
+      "Surya": 0,
+      "Zonal": 0
+    },
+    "blast": {
+      "ADT45": 793,
+      "AndraPonni": 112,
+      "AtchayaPonni": 27,
+      "IR20": 22,
+      "KarnatakaPonni": 533,
+      "Onthanel": 25,
+      "Ponni": 136,
+      "RR": 0,
+      "Surya": 7,
+      "Zonal": 83
+    },
+    "brown_spot": {
+      "ADT45": 835,
+      "AndraPonni": 0,
+      "AtchayaPonni": 0,
+      "IR20": 0,
+      "KarnatakaPonni": 110,
+      "Onthanel": 0,
+      "Ponni": 14,
+      "RR": 0,
+      "Surya": 0,
+      "Zonal": 6
+    },
+    "dead_heart": {
+      "ADT45": 979,
+      "AndraPonni": 70,
+      "AtchayaPonni": 0,
+      "IR20": 82,
+      "KarnatakaPonni": 113,
+      "Onthanel": 110,
+      "Ponni": 63,
+      "RR": 18,
+      "Surya": 0,
+      "Zonal": 7
+    },
+    "downy_mildew": {
+      "ADT45": 331,
+      "AndraPonni": 0,
+      "AtchayaPonni": 55,
+      "IR20": 0,
+      "KarnatakaPonni": 121,
+      "Onthanel": 40,
+      "Ponni": 6,
+      "RR": 0,
+      "Surya": 20,
+      "Zonal": 47
+    },
+    "hispa": {
+      "ADT45": 833,
+      "AndraPonni": 181,
+      "AtchayaPonni": 340,
+      "IR20": 0,
+      "KarnatakaPonni": 66,
+      "Onthanel": 81,
+      "Ponni": 32,
+      "RR": 0,
+      "Surya": 0,
+      "Zonal": 61
+    },
+    "normal": {
+      "ADT45": 1457,
+      "AndraPonni": 0,
+      "AtchayaPonni": 0,
+      "IR20": 0,
+      "KarnatakaPonni": 0,
+      "Onthanel": 8,
+      "Ponni": 281,
+      "RR": 18,
+      "Surya": 0,
+      "Zonal": 0
+    },
+    "tungro": {
+      "ADT45": 991,
+      "AndraPonni": 0,
+      "AtchayaPonni": 39,
+      "IR20": 0,
+      "KarnatakaPonni": 0,
+      "Onthanel": 14,
+      "Ponni": 28,
+      "RR": 0,
+      "Surya": 3,
+      "Zonal": 13
+    }
+  },
+  "plots_saved": [
+    "C:\\Users\\hp\\OneDrive\\Desktop\\paddy-disease\\results\\plots\\dataset_analysis/class_distribution.png",
+    "C:\\Users\\hp\\OneDrive\\Desktop\\paddy-disease\\results\\plots\\dataset_analysis/variety_distribution.png",
+    "C:\\Users\\hp\\OneDrive\\Desktop\\paddy-disease\\results\\plots\\dataset_analysis/age_distribution.png",
+    "C:\\Users\\hp\\OneDrive\\Desktop\\paddy-disease\\results\\plots\\dataset_analysis/image_dimensions_distribution.png",
+    "C:\\Users\\hp\\OneDrive\\Desktop\\paddy-disease\\results\\plots\\dataset_analysis/sample_grid_per_class.png",
+    "C:\\Users\\hp\\OneDrive\\Desktop\\paddy-disease\\results\\plots\\dataset_analysis/variety_vs_disease_heatmap.png"
+  ]
+}

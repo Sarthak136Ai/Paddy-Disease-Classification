@@ -1,0 +1,144 @@
+{
+  "accuracy": 0.9257,
+  "precision_macro": 0.9207,
+  "recall_macro": 0.9203,
+  "f1_macro": 0.9199,
+  "precision_weighted": 0.9269,
+  "recall_weighted": 0.9257,
+  "f1_weighted": 0.9257,
+  "per_class": {
+    "bacterial_leaf_blight": {
+      "precision": 0.8904,
+      "recall": 0.9028,
+      "f1_score": 0.8966
+    },
+    "bacterial_leaf_streak": {
+      "precision": 0.9322,
+      "recall": 0.9649,
+      "f1_score": 0.9483
+    },
+    "bacterial_panicle_blight": {
+      "precision": 0.9792,
+      "recall": 0.94,
+      "f1_score": 0.9592
+    },
+    "blast": {
+      "precision": 0.9071,
+      "recall": 0.9349,
+      "f1_score": 0.9208
+    },
+    "brown_spot": {
+      "precision": 0.9133,
+      "recall": 0.9448,
+      "f1_score": 0.9288
+    },
+    "dead_heart": {
+      "precision": 0.9726,
+      "recall": 0.9816,
+      "f1_score": 0.9771
+    },
+    "downy_mildew": {
+      "precision": 0.7857,
+      "recall": 0.828,
+      "f1_score": 0.8063
+    },
+    "hispa": {
+      "precision": 0.9641,
+      "recall": 0.8996,
+      "f1_score": 0.9307
+    },
+    "normal": {
+      "precision": 0.9242,
+      "recall": 0.966,
+      "f1_score": 0.9446
+    },
+    "tungro": {
+      "precision": 0.9384,
+      "recall": 0.8405,
+      "f1_score": 0.8867
+    }
+  },
+  "classification_report_dict": {
+    "bacterial_leaf_blight": {
+      "precision": 0.8904109589041096,
+      "recall": 0.9027777777777778,
+      "f1-score": 0.896551724137931,
+      "support": 72.0
+    },
+    "bacterial_leaf_streak": {
+      "precision": 0.9322033898305084,
+      "recall": 0.9649122807017544,
+      "f1-score": 0.9482758620689655,
+      "support": 57.0
+    },
+    "bacterial_panicle_blight": {
+      "precision": 0.9791666666666666,
+      "recall": 0.94,
+      "f1-score": 0.9591836734693877,
+      "support": 50.0
+    },
+    "blast": {
+      "precision": 0.9070631970260223,
+      "recall": 0.9348659003831418,
+      "f1-score": 0.9207547169811321,
+      "support": 261.0
+    },
+    "brown_spot": {
+      "precision": 0.9133333333333333,
+      "recall": 0.9448275862068966,
+      "f1-score": 0.9288135593220339,
+      "support": 145.0
+    },
+    "dead_heart": {
+      "precision": 0.9726027397260274,
+      "recall": 0.9815668202764977,
+      "f1-score": 0.9770642201834863,
+      "support": 217.0
+    },
+    "downy_mildew": {
+      "precision": 0.7857142857142857,
+      "recall": 0.8279569892473119,
+      "f1-score": 0.806282722513089,
+      "support": 93.0
+    },
+    "hispa": {
+      "precision": 0.9641255605381166,
+      "recall": 0.899581589958159,
+      "f1-score": 0.9307359307359307,
+      "support": 239.0
+    },
+    "normal": {
+      "precision": 0.924187725631769,
+      "recall": 0.9660377358490566,
+      "f1-score": 0.9446494464944649,
+      "support": 265.0
+    },
+    "tungro": {
+      "precision": 0.9383561643835616,
+      "recall": 0.8404907975460123,
+      "f1-score": 0.8867313915857605,
+      "support": 163.0
+    },
+    "accuracy": 0.9257362355953905,
+    "macro avg": {
+      "precision": 0.9207164021754402,
+      "recall": 0.9203017477946608,
+      "f1-score": 0.9199043247492181,
+      "support": 1562.0
+    },
+    "weighted avg": {
+      "precision": 0.9268850048011646,
+      "recall": 0.9257362355953905,
+      "f1-score": 0.9256594210960531,
+      "support": 1562.0
+    }
+  },
+  "classification_report_str": "                          precision    recall  f1-score   support\n\n   bacterial_leaf_blight     0.8904    0.9028    0.8966        72\n   bacterial_leaf_streak     0.9322    0.9649    0.9483        57\nbacterial_panicle_blight     0.9792    0.9400    0.9592        50\n                   blast     0.9071    0.9349    0.9208       261\n              brown_spot     0.9133    0.9448    0.9288       145\n              dead_heart     0.9726    0.9816    0.9771       217\n            downy_mildew     0.7857    0.8280    0.8063        93\n                   hispa     0.9641    0.8996    0.9307       239\n                  normal     0.9242    0.9660    0.9446       265\n                  tungro     0.9384    0.8405    0.8867       163\n\n                accuracy                         0.9257      1562\n               macro avg     0.9207    0.9203    0.9199      1562\n            weighted avg     0.9269    0.9257    0.9257      1562\n",
+  "test_loss": 0.2775,
+  "latency_ms_per_image": 9.85,
+  "total_test_samples": 1562,
+  "total_parameters": 6964106,
+  "trainable_parameters": 6964106,
+  "checkpoint_size_mb": 80.59,
+  "model_name": "densenet121"
+}
