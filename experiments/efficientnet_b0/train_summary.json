@@ -1,0 +1,147 @@
+{
+  "model_name": "efficientnet_b0",
+  "best_epoch": 24,
+  "best_val_loss": 0.1069,
+  "best_val_accuracy": 0.9744,
+  "best_val_f1_macro": 0.9735,
+  "total_training_time_seconds": 2129.47,
+  "total_epochs_trained": 25,
+  "best_metrics": {
+    "accuracy": 0.9744,
+    "precision_macro": 0.9742,
+    "recall_macro": 0.973,
+    "f1_macro": 0.9735,
+    "precision_weighted": 0.9747,
+    "recall_weighted": 0.9744,
+    "f1_weighted": 0.9744,
+    "per_class": {
+      "bacterial_leaf_blight": {
+        "precision": 0.9589,
+        "recall": 0.9722,
+        "f1_score": 0.9655
+      },
+      "bacterial_leaf_streak": {
+        "precision": 1.0,
+        "recall": 0.9825,
+        "f1_score": 0.9912
+      },
+      "bacterial_panicle_blight": {
+        "precision": 1.0,
+        "recall": 0.9804,
+        "f1_score": 0.9901
+      },
+      "blast": {
+        "precision": 0.9735,
+        "recall": 0.9847,
+        "f1_score": 0.979
+      },
+      "brown_spot": {
+        "precision": 0.986,
+        "recall": 0.9724,
+        "f1_score": 0.9792
+      },
+      "dead_heart": {
+        "precision": 0.9954,
+        "recall": 1.0,
+        "f1_score": 0.9977
+      },
+      "downy_mildew": {
+        "precision": 0.9072,
+        "recall": 0.9462,
+        "f1_score": 0.9263
+      },
+      "hispa": {
+        "precision": 0.9587,
+        "recall": 0.9707,
+        "f1_score": 0.9647
+      },
+      "normal": {
+        "precision": 0.9808,
+        "recall": 0.9697,
+        "f1_score": 0.9752
+      },
+      "tungro": {
+        "precision": 0.981,
+        "recall": 0.9509,
+        "f1_score": 0.9657
+      }
+    },
+    "classification_report_dict": {
+      "bacterial_leaf_blight": {
+        "precision": 0.958904109589041,
+        "recall": 0.9722222222222222,
+        "f1-score": 0.9655172413793104,
+        "support": 72.0
+      },
+      "bacterial_leaf_streak": {
+        "precision": 1.0,
+        "recall": 0.9824561403508771,
+        "f1-score": 0.9911504424778761,
+        "support": 57.0
+      },
+      "bacterial_panicle_blight": {
+        "precision": 1.0,
+        "recall": 0.9803921568627451,
+        "f1-score": 0.9900990099009901,
+        "support": 51.0
+      },
+      "blast": {
+        "precision": 0.9734848484848485,
+        "recall": 0.9846743295019157,
+        "f1-score": 0.979047619047619,
+        "support": 261.0
+      },
+      "brown_spot": {
+        "precision": 0.986013986013986,
+        "recall": 0.9724137931034482,
+        "f1-score": 0.9791666666666666,
+        "support": 145.0
+      },
+      "dead_heart": {
+        "precision": 0.9953917050691244,
+        "recall": 1.0,
+        "f1-score": 0.9976905311778291,
+        "support": 216.0
+      },
+      "downy_mildew": {
+        "precision": 0.9072164948453608,
+        "recall": 0.946236559139785,
+        "f1-score": 0.9263157894736842,
+        "support": 93.0
+      },
+      "hispa": {
+        "precision": 0.9586776859504132,
+        "recall": 0.9707112970711297,
+        "f1-score": 0.9646569646569647,
+        "support": 239.0
+      },
+      "normal": {
+        "precision": 0.9808429118773946,
+        "recall": 0.9696969696969697,
+        "f1-score": 0.9752380952380952,
+        "support": 264.0
+      },
+      "tungro": {
+        "precision": 0.9810126582278481,
+        "recall": 0.950920245398773,
+        "f1-score": 0.9657320872274143,
+        "support": 163.0
+      },
+      "accuracy": 0.974375400384369,
+      "macro avg": {
+        "precision": 0.9741544400058016,
+        "recall": 0.9729723713347866,
+        "f1-score": 0.9734614447246448,
+        "support": 1561.0
+      },
+      "weighted avg": {
+        "precision": 0.9746572521469916,
+        "recall": 0.974375400384369,
+        "f1-score": 0.9744376594573985,
+        "support": 1561.0
+      }
+    },
+    "classification_report_str": "                          precision    recall  f1-score   support\n\n   bacterial_leaf_blight     0.9589    0.9722    0.9655        72\n   bacterial_leaf_streak     1.0000    0.9825    0.9912        57\nbacterial_panicle_blight     1.0000    0.9804    0.9901        51\n                   blast     0.9735    0.9847    0.9790       261\n              brown_spot     0.9860    0.9724    0.9792       145\n              dead_heart     0.9954    1.0000    0.9977       216\n            downy_mildew     0.9072    0.9462    0.9263        93\n                   hispa     0.9587    0.9707    0.9647       239\n                  normal     0.9808    0.9697    0.9752       264\n                  tungro     0.9810    0.9509    0.9657       163\n\n                accuracy                         0.9744      1561\n               macro avg     0.9742    0.9730    0.9735      1561\n            weighted avg     0.9747    0.9744    0.9744      1561\n",
+    "loss": 0.1069
+  }
+}
