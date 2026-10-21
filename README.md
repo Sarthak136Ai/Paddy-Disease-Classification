@@ -205,7 +205,33 @@ paddy-disease/
 
 ---
 
-## 8. Troubleshooting & FAQ
+## 8. Deploying to Vercel
+
+The application is pre-configured for instantaneous deployment on **Vercel** serverless functions via `api/index.py` and `vercel.json`.
+
+### Option A: 1-Click Git Integration (Recommended)
+1. Push this repository to your GitHub account (`git push origin main`).
+2. Navigate to [vercel.com/new](https://vercel.com/new).
+3. Import your `Paddy-Disease-Classification` repository.
+4. Keep the default settings (**Framework Preset: Other**, **Root Directory: `./`**).
+5. Click **Deploy**. Vercel will install the serverless requirements and launch your live application at `https://<your-project>.vercel.app`!
+
+### Option B: Deploy via Vercel CLI
+```bash
+# 1. Install or run Vercel CLI
+npx vercel
+
+# 2. Deploy to Production
+npx vercel --prod
+```
+
+> **Note on Serverless Architecture**:
+> - Vercel serverless functions enforce a strict **250 MB** bundle limit. The production `requirements.txt` includes lightweight dependencies (`Flask`, `Pillow`, `numpy`, `Werkzeug`).
+> - For full local GPU/CUDA model training and PyTorch experiments, install: `pip install -r requirements-train.txt`.
+
+---
+
+## 9. Troubleshooting & FAQ
 
 | Issue | Cause | Solution |
 | :--- | :--- | :--- |
@@ -215,6 +241,6 @@ paddy-disease/
 
 ---
 
-## 9. Agricultural & Ethical Disclaimer
+## 10. Agricultural & Ethical Disclaimer
 
 This application is developed strictly for **academic, research, and educational purposes**. Machine learning predictions and Grad-CAM attention heatmaps are statistical approximations and must not replace professional on-site phytosanitary scouting or chemical prescription by certified agronomists.
